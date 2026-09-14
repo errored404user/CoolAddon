@@ -1,0 +1,5 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "blender: runs inside the real headless Blender interpreter (needs tools/setup_bpy_env.sh)",
+]
