@@ -130,6 +130,16 @@ class DashboardCase(unittest.TestCase):
         data = self._get_json("/api/jobs")
         self.assertIsInstance(data["jobs"], list)
 
+    def test_cli_help_lists_options(self):
+        import subprocess
+        here = Path(__file__).resolve().parent.parent
+        proc = subprocess.run([sys.executable, "dashboard/server.py", "--help"],
+                              capture_output=True, text=True, cwd=here,
+                              timeout=30)
+        self.assertEqual(proc.returncode, 0)
+        self.assertIn("--open", proc.stdout)
+        self.assertIn("--port", proc.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

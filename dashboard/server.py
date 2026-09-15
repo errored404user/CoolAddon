@@ -663,6 +663,8 @@ def main(argv=None) -> int:
     parser.add_argument("--port", type=int, default=None)
     parser.add_argument("--blender-host", default=None)
     parser.add_argument("--blender-port", type=int, default=None)
+    parser.add_argument("--open", action="store_true",
+                        help="Open the dashboard in a browser once started")
     args = parser.parse_args(argv)
     settings = load_config(HERE / "config" / "extension.json")
     if args.host:
