@@ -1,29 +1,65 @@
 # Install Guide — Blender AI Connection
 
-## 1) Blender addon (required)
+## 0) Pick your Blender version
 
-**Option A — from folder (developers):**
-1. Open Blender → Edit → Preferences → Add-ons → Install…
-2. Pick any file inside `blender_ai_connection/` (Blender registers the folder),
-   or copy/symlink the `blender_ai_connection` folder into your Blender
-   `scripts/addons/` directory.
-3. Enable **Blender AI Connection**, open the 3D Viewport Sidebar (`N`) →
-   **AI Agent** tab.
+| Your Blender | Download this file | Install it in |
+|---|---|---|
+| **4.2 or newer** (incl. 5.x) | `dist/BlenderAIConnection-1.0.0.zip` | Preferences → **Extensions** → *Install from Disk* |
+| **3.6 – 4.1** | `dist/BlenderAIConnection-legacy-1.0.0.zip` | Preferences → **Add-ons** → *Install…* |
 
-**Option B — from ZIP:**
-1. Zip the `blender_ai_connection/` folder (the folder itself, not the repo).
-2. Blender → Preferences → Add-ons → Install… → select the ZIP → enable it.
+Get the ZIPs from the repo's `dist/` folder (open the file on GitHub → Download),
+or build them yourself: `python install/build.py`. No other downloads needed —
+the addon itself requires **no pip packages**.
 
-2. Press **Start Server** (bridge defaults to `127.0.0.1:9876`).
-3. Type a task, pick a mode (or leave **Smart Agent**), press **START AGENT**.
+> ⚠️ Do **not** install the GitHub *repository* ZIP (`CoolAddon-....zip`) in Blender:
+> it has the wrong layout and Blender will reject it. Only the `dist/` files work.
 
-Requirements: Blender 3.6+ (4.x/5.x supported). No pip packages needed inside Blender.
+## 1) Blender 4.2+ (Extensions platform)
 
-## 2) MCP server (only for external AI control, e.g. Claude Desktop)
+1. Edit → Preferences → **Extensions**.
+2. Top-right arrow ▼ → **Install from Disk…** → select `BlenderAIConnection-1.0.0.zip`.
+3. Find **Blender AI Connection**, tick the checkbox to enable it.
+4. Approve the permission prompt (**network** = local bridge + LLM APIs,
+   **files** = log export next to the `.blend`). Without approval it can't run.
+5. Open the 3D Viewport, press `N` → **AI Agent** tab → **Start Server**.
 
-1. `pip install -r mcp_server/requirements.txt` (optional but recommended —
-   without it a minimal JSON-RPC fallback is used).
-2. Ensure the Blender bridge is running (step 1).
+## 2) Blender 3.6–4.1 (legacy Add-ons)
+
+1. Edit → Preferences → **Add-ons** → **Install…** →
+   select `BlenderAIConnection-legacy-1.0.0.zip`.
+2. Enable **Blender AI Connection** (checkbox).
+3. 3D Viewport → `N` → **AI Agent** tab → **Start Server**.
+
+## 3) "It won't install" — troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| *"Archive does not contain an add-on/extension"*, or nothing happens | Wrong ZIP (repo ZIP, or a re-zipped folder) | Use the exact `dist/` file for your Blender (§0). Don't unzip/re-zip it |
+| Installed, but not in the list | Looking in the wrong tab (4.2+: it's under **Extensions**, and search "AI") | Search "Blender AI"; check the *Install from Disk* completed without errors |
+| Visible but nothing works / no N-panel tab | Not enabled, or side panel hidden | Tick the enable checkbox; in the 3D View press `N` and pick the **AI Agent** tab |
+| Permission prompt denied | Extension blocked from network/files | Disable → enable again → **Allow** this time |
+| Red error on enable | Environment-specific conflict | Window → *Toggle System Console*, copy the traceback (see §8) |
+| Old version stuck / "already installed" | Stale copy in Blender's folders | Remove it in Preferences, **restart Blender**, install the new ZIP |
+| "Legacy add-on" warning (4.2+) | You used the legacy ZIP | Harmless — but prefer the non-legacy `dist` file |
+
+**Manual install (bypasses the installer entirely):**
+- 4.2+: unzip `BlenderAIConnection-1.0.0.zip` so that
+  `.../extensions/user/blender_ai_connection/blender_manifest.toml` exists.
+- 3.6–4.1: unzip the legacy ZIP so that
+  `.../scripts/addons/blender_ai_connection/__init__.py` exists.
+
+Base folders: Windows `%APPDATA%\Blender Foundation\Blender\<ver>\`,
+macOS `~/Library/Application Support/Blender/<ver>/`,
+Linux `~/.config/blender/<ver>/`. Restart Blender afterwards.
+
+**Still stuck?** Tell us: Blender version (*Help → About*), the exact error text
+from *Window → Toggle System Console*, and which ZIP you used.
+
+## 4) MCP server (only for external AI control, e.g. Claude Desktop)
+
+1. `pip install -r mcp_server/requirements.txt` (recommended — without it a
+   minimal JSON-RPC fallback is used).
+2. Ensure the Blender bridge is running (§1/§2, **Start Server**).
 3. Add to your MCP client config (see `mcp_server/claude_config_example.json`):
 
 ```json
@@ -34,14 +70,14 @@ Requirements: Blender 3.6+ (4.x/5.x supported). No pip packages needed inside Bl
 
 4. Restart the MCP client. In Blender, **Check MCP** should report *Ready*.
 
-## 3) Terminal CLI (optional, no MCP client needed)
+## 5) Terminal CLI (optional, no MCP client needed)
 
 ```bash
 python agent_runner/cli.py ping
 python agent_runner/cli.py run --task "Create a futuristic robot" --mode SMART
 ```
 
-## LLM provider keys (for ChatGPT / Claude / Gemini / DeepSeek / Kimi)
+## 6) LLM provider keys (for ChatGPT / Claude / Gemini / DeepSeek / Kimi)
 
 The AI chat *websites* cannot reach your computer — use each provider's **API key**:
 
@@ -59,23 +95,26 @@ note panel keys are stored in the `.blend` file). Then: AI Agent tab →
 AI PROVIDER → **LLM provider** → START AGENT. Terminal alternative:
 `python agent_runner/llm.py run --provider deepseek --task "…"`.
 
-## 5) Extension dashboard (recommended UI for Blender + providers)
+## 7) Extension dashboard (recommended UI for Blender + providers)
+
+Easiest: double-click **`Start-Extension.bat`** (Windows) or run
+`./start-extension.sh` (macOS/Linux) — a browser tab opens automatically.
+
+Manual equivalent:
 
 ```bash
-python extension/server.py [--port 8899]
+python extension/server.py [--port 8899] [--open]
 # open http://localhost:8899
 ```
 
-Needs the Blender bridge running (§1). Pick engine **Built-in** (free, offline)
-or **LLM provider** (key via panel field or env var, § keys above), choose a
-mode, type a task, press **START AGENT**. Includes plan preview, live
-execution feed, tool browser with quick-run, job history, and MCP setup snippet.
-Settings live in `extension/config/extension.json`.
+Needs the Blender bridge running (§1/§2). Pick engine **Built-in** (free, offline)
+or **LLM provider** (key via field or env var, §6), choose a mode, type a task,
+press **START AGENT**. If the port is taken you'll get a clear message —
+retry with `--port 8900`. Settings live in `extension/config/extension.json`.
 
-## 4) Verify the install
+## 8) Verify the install
 
 ```bash
-python -m unittest discover -s tests -v
+python -m unittest discover -s tests -v   # pure-Python, no Blender needed
+python install/build.py --check           # manifest + packaging validation
 ```
-
-All tests are pure-Python and run without Blender.

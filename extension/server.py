@@ -674,11 +674,24 @@ def main(argv=None) -> int:
     Handler.settings = settings
     Handler.store = store
     host, port = settings["server"]["host"], int(settings["server"]["port"])
-    server = ThreadingHTTPServer((host, port), Handler)
+    try:
+        server = ThreadingHTTPServer((host, port), Handler)
+    except OSError as exc:
+        print(f"Could not start the dashboard on {host}:{port} ({exc}).")
+        print("The port is probably already in use — retry with e.g. "
+              "--port 8900, or stop the other program.")
+        return 2
     server.daemon_threads = True
     url_host = "localhost" if host == "0.0.0.0" else host
-    print(f"Blender AI Extension: http://{url_host}:{port}")
+    url = f"http://{url_host}:{port}"
+    print(f"Blender AI Extension: {url}")
     print(f"Blender bridge target: {settings['blender']['host']}:{settings['blender']['port']}")
+    if args.open:
+        try:
+            import webbrowser
+            threading.Timer(0.6, webbrowser.open, args=(url,)).start()
+        except Exception as exc:  # noqa: BLE001
+            print(f"(Could not open a browser: {exc})")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

@@ -35,8 +35,14 @@ bridge that external AIs can also drive via **MCP**.
 
 ### A. Blender only (2 minutes, no other setup)
 
-1. Blender → Preferences → Add-ons → Install… → zip the `blender_ai_connection/`
-   folder → enable **Blender AI Connection**. (Blender 3.6+, incl. 4.x/5.x.)
+1. Download the right ZIP from the repo's `dist/` folder
+   (or build it with `python install/build.py`):
+   - **Blender 4.2+**: `BlenderAIConnection-1.0.0.zip` → Edit → Preferences →
+     **Extensions** → *Install from Disk* → enable **Blender AI Connection**
+     (approve the network/files permission when asked).
+   - **Blender 3.6–4.1**: `BlenderAIConnection-legacy-1.0.0.zip` → Edit →
+     Preferences → **Add-ons** → *Install…* → enable it.
+   Full steps + "it won't install" fixes: `install/README.md`.
 2. 3D Viewport → Sidebar (`N`) → **AI Agent** tab → **Start Server**.
 3. Type a task (or pick an **Examples** preset), leave mode on **Smart Agent**,
    press **START AGENT**.
