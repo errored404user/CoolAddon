@@ -1,0 +1,18 @@
+{
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8899
+  },
+  "blender": {
+    "host": "127.0.0.1",
+    "port": 9876
+  },
+  "defaults": {
+    "mode": "SMART",
+    "engine": "builtin",
+    "provider": "openai",
+    "max_iters": 25
+  },
+  "denied_tools": [],
+  "comment": "API keys are NEVER stored here. Enter them in the dashboard (kept in memory only) or set provider env vars before launching the server."
+}

@@ -130,6 +130,8 @@ blender_ai_connection/          # Blender addon (zip this to install)
   utils/blender_utils.py        # safe bpy wrappers
 mcp_server/                     # stdio MCP server → TCP bridge (SDK + minimal backends)
 agent_runner/cli.py             # terminal client (plan/run/tool/ping/tools/modes)
+extension/                      # web control center: dashboard + job server
+  server.py  ui/  config/       # stdlib HTTP, vanilla JS, settings
 skills/                         # 8 agent playbooks (modeling…director) for LLMs
 config/config.json              # defaults: endpoint, limits, log level, permissions
 tests/ install/                 # pure-python unittest suite + install guide

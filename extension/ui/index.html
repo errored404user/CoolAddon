@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blender AI — Extension</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span id="dot" class="dot gray" title="connection"></span>
+    <div>
+      <h1>Blender AI <span class="muted">Extension</span></h1>
+      <p id="bridgeLine" class="sub">Bridge: checking…</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <span id="blenderVer" class="pill">Blender: —</span>
+    <span id="counts" class="pill">— tools</span>
+    <button id="btnTest" class="btn small">Reconnect</button>
+  </div>
+</header>
+
+<main class="grid">
+  <!-- LEFT -->
+  <section class="col">
+    <div class="card">
+      <h2>Connection</h2>
+      <div class="row">
+        <label>Host <input id="inHost" value="127.0.0.1" spellcheck="false"></label>
+        <label class="narrow">Port <input id="inPort" value="9876" inputmode="numeric"></label>
+      </div>
+      <div class="row">
+        <button id="btnConn" class="btn small">Apply &amp; test</button>
+      </div>
+      <p id="connMsg" class="msg">—</p>
+      <details>
+        <summary>MCP setup (Claude Desktop, Cursor, …)</summary>
+        <p id="mcpStatus" class="msg">—</p>
+        <pre id="mcpSnippet" class="snippet">—</pre>
+        <button id="btnCopyMcp" class="btn small">Copy config</button>
+      </details>
+    </div>
+
+    <div class="card">
+      <h2>AI Provider</h2>
+      <div class="row">
+        <label class="radio"><input type="radio" name="engine" value="builtin" checked> Built-in <span class="muted">free · offline</span></label>
+        <label class="radio"><input type="radio" name="engine" value="llm"> LLM <span class="muted">real model</span></label>
+      </div>
+      <div id="llmFields" class="disabled">
+        <label>Provider <select id="inProvider"></select></label>
+        <label>Model <input id="inModel" placeholder="(provider default)" spellcheck="false"></label>
+        <label>API key <input id="inKey" type="password" placeholder="…or set env var" autocomplete="off" spellcheck="false"></label>
+        <label>Endpoint <input id="inEndpoint" placeholder="(provider default)" spellcheck="false"></label>
+        <label>Max steps <input id="inIters" type="number" value="25" min="1" max="200"></label>
+        <p id="provHelp" class="msg">—</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Mode</h2>
+      <label>Active mode <select id="inMode"></select></label>
+      <p id="modeDesc" class="msg">—</p>
+    </div>
+  </section>
+
+  <!-- CENTER -->
+  <section class="col wide">
+    <div class="card">
+      <h2>Task</h2>
+      <textarea id="inTask" rows="3" placeholder="Describe the work, e.g. Create a detailed futuristic robot."></textarea>
+      <div class="row wrap">
+        <select id="inExample" class="grow"></select>
+        <button id="btnPlan" class="btn small">Preview plan</button>
+      </div>
+      <div class="row">
+        <button id="btnStart" class="btn primary big">▶ START AGENT</button>
+        <button id="btnCancel" class="btn danger" disabled>Cancel</button>
+      </div>
+      <ol id="planList" class="plan" hidden></ol>
+    </div>
+
+    <div class="card">
+      <h2>Execution <span id="jobId" class="muted"></span></h2>
+      <div class="progress"><div id="bar" class="bar" style="width:0%"></div></div>
+      <p id="curStep" class="msg">Idle.</p>
+    </div>
+
+    <div class="card">
+      <h2>Results</h2>
+      <p id="finalText" class="msg">No results yet.</p>
+    </div>
+
+    <div class="card">
+      <h2>Live feed</h2>
+      <ul id="feed" class="feed"><li class="muted">Events will stream here.</li></ul>
+    </div>
+  </section>
+
+  <!-- RIGHT -->
+  <section class="col">
+    <div class="card">
+      <h2>Tools <span id="toolCount" class="muted"></span></h2>
+      <div class="row">
+        <input id="toolSearch" class="grow" placeholder="Search tools…" spellcheck="false">
+      </div>
+      <div class="row">
+        <select id="toolCat" class="grow"></select>
+      </div>
+      <ul id="toolList" class="tools"></ul>
+      <div class="quickrun">
+        <p class="msg"><strong id="qrName">Select a tool ↑</strong></p>
+        <p id="qrDesc" class="msg">—</p>
+        <textarea id="qrParams" rows="3" spellcheck="false">{}</textarea>
+        <div class="row"><button id="btnRunTool" class="btn small">Run tool</button></div>
+        <pre id="qrResult" class="snippet" hidden></pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Jobs</h2>
+      <ul id="jobList" class="jobs"><li class="muted">No runs yet.</li></ul>
+    </div>
+  </section>
+</main>
+
+<footer class="foot muted">Keys stay in server memory only · Built-in engine needs no key · Bridge must run in Blender (AI Agent → Start Server)</footer>
+<script src="/app.js"></script>
+</body>
+</html>

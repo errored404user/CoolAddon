@@ -59,6 +59,19 @@ note panel keys are stored in the `.blend` file). Then: AI Agent tab →
 AI PROVIDER → **LLM provider** → START AGENT. Terminal alternative:
 `python agent_runner/llm.py run --provider deepseek --task "…"`.
 
+## 5) Extension dashboard (recommended UI for Blender + providers)
+
+```bash
+python extension/server.py [--port 8899]
+# open http://localhost:8899
+```
+
+Needs the Blender bridge running (§1). Pick engine **Built-in** (free, offline)
+or **LLM provider** (key via panel field or env var, § keys above), choose a
+mode, type a task, press **START AGENT**. Includes plan preview, live
+execution feed, tool browser with quick-run, job history, and MCP setup snippet.
+Settings live in `extension/config/extension.json`.
+
 ## 4) Verify the install
 
 ```bash
