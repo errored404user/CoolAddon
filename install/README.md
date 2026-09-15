@@ -42,6 +42,10 @@ the addon itself requires **no pip packages**.
 | Old version stuck / "already installed" | Stale copy in Blender's folders | Remove it in Preferences, **restart Blender**, install the new ZIP |
 | "Legacy add-on" warning (4.2+) | You used the legacy ZIP | Harmless — but prefer the non-legacy `dist` file |
 | *"Cannot load extension… Filenames starting with \_ are reserved"* | You opened the file in **Chrome/Edge** (`chrome://extensions`) — this project has **no** browser extension | Don't load anything into Chrome. Blender part → install the `dist/` ZIP **in Blender** (§1/§2); web UI → **run** `python dashboard/server.py`, then open the printed URL in any browser |
+| Double-clicking the Start-Dashboard launcher flashes and closes | Python is missing, or the launcher is not inside the extracted repo folder | Install Python 3.10+ (Windows: tick "Add python.exe to PATH"), extract the whole repo ZIP, run the launcher from inside that folder |
+| `dashboard/server.py` not found | You downloaded only the launcher file, not the repository | On GitHub: Code → Download ZIP, extract everything, run the launcher from inside the folder |
+| Double-clicking `start-dashboard.sh` opens a text editor (Mac) | macOS will not execute scripts on double-click | Open Terminal in the folder, run `chmod +x start-dashboard.sh` once, then `./start-dashboard.sh` |
+| Dashboard page loads but CONNECTION is red | The Blender bridge is not running | In Blender: AI Agent tab → Start Server, then reload the page |
 
 **Manual install (bypasses the installer entirely):**
 - 4.2+: unzip `BlenderAIConnection-1.0.0.zip` so that
