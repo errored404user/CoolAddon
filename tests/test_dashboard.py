@@ -1,4 +1,4 @@
-"""Extension server tests: API + offline behavior (no Blender, no network)."""
+"""Dashboard server tests: API + offline behavior (no Blender, no network)."""
 
 import json
 import socket
@@ -13,7 +13,7 @@ from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from extension import server as ext_server  # noqa: E402
+from dashboard import server as dashboard_server  # noqa: E402
 
 
 def _closed_port() -> int:
@@ -24,10 +24,10 @@ def _closed_port() -> int:
     return port
 
 
-class ExtensionCase(unittest.TestCase):
+class DashboardCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.server, _, _ = ext_server.create_server(
+        cls.server, _, _ = dashboard_server.create_server(
             "127.0.0.1", 0, "127.0.0.1", _closed_port())
         cls.thread = threading.Thread(target=cls.server.serve_forever,
                                       daemon=True)

@@ -5,16 +5,16 @@ schema_version = "1.0.0"
 id = "blender_ai_connection"
 version = "1.0.0"
 name = "Blender AI Connection"
-tagline = "MCP-based AI production agent: natural-language modeling, materials, animation, lighting and cutscenes."
+tagline = "AI production agent for Blender: model, animate, light and film by chat"
 maintainer = "CoolAddon"
 type = "add-on"
 tags = ["3D View", "Animation", "Scene", "System"]
 
 blender_version_min = "4.2.0"
 
-license = ["SPDX:MIT"]
+license = ["SPDX:GPL-3.0-or-later"]
 website = "https://github.com/errored404user/CoolAddon"
 
-# The addon runs a local TCP bridge + HTTP calls to LLM APIs (network)
-# and can export a log text file next to the .blend (files).
-permissions = ["network", "files"]
+[permissions]
+network = "Run a local bridge server and call LLM APIs"
+files = "Export the agent log file next to the blend file"

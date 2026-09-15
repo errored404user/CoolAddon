@@ -35,6 +35,54 @@ SKIP_DIR_NAMES = {"__pycache__", ".git"}
 SKIP_FILE_NAMES = {".DS_Store"}
 SKIP_SUFFIXES = {".pyc", ".pyo"}
 
+# Allowed add-on tags (Blender manual — Extensions Tags).
+ADDON_TAGS = {"3D View", "Add Curve", "Add Mesh", "Animation", "Bake",
+              "Camera", "Compositing", "Development", "Game Engine",
+              "Geometry Nodes", "Grease Pencil", "Import-Export",
+              "Lighting", "Material", "Modeling", "Mesh", "Node", "Object",
+              "Paint", "Pipeline", "Physics", "Render", "Rigging", "Scene",
+              "Sculpt", "Sequencer", "System", "Text Editor", "Tracking",
+              "User Interface", "UV"}
+PERMISSION_KEYS = {"files", "network", "clipboard", "camera", "microphone"}
+
+
+def validate_manifest_rules(manifest: dict) -> list:
+    """Official packaging rules. Returns a list of error strings."""
+    errors: list = []
+    pkg_id = str(manifest.get("id", ""))
+    if pkg_id and not re.fullmatch(r"[a-z][a-z0-9_]*", pkg_id):
+        errors.append(f"manifest id {pkg_id!r} must be lowercase "
+                      "(letters, digits, underscores)")
+    tagline = str(manifest.get("tagline", ""))
+    if tagline:
+        if tagline[-1] in ".:;!?":
+            errors.append("manifest tagline must not end with punctuation")
+        if len(tagline) > 120:
+            errors.append(f"manifest tagline too long ({len(tagline)} chars, max 120)")
+    tags = manifest.get("tags", []) or []
+    unknown = [t for t in tags if t not in ADDON_TAGS]
+    if unknown:
+        errors.append(f"manifest has unknown add-on tags: {unknown}")
+    if manifest.get("type") == "add-on" and "SPDX:GPL-3.0-or-later" not in (
+            manifest.get("license", []) or []):
+        errors.append("add-ons require license 'SPDX:GPL-3.0-or-later' "
+                      "(Blender Extensions Platform rule)")
+    permissions = manifest.get("permissions")
+    if permissions is not None:
+        if not isinstance(permissions, dict):
+            errors.append("manifest permissions must be a table, e.g. "
+                          '[permissions] network = "reason without period"')
+        else:
+            for key, reason in permissions.items():
+                if key not in PERMISSION_KEYS:
+                    errors.append(f"manifest has unknown permission '{key}'")
+                if not isinstance(reason, str) or not reason.strip():
+                    errors.append(f"manifest permission '{key}' needs a reason string")
+                elif reason.strip()[-1] in ".:;!?":
+                    errors.append(f"manifest permission '{key}' reason must not "
+                                  "end with punctuation")
+    return errors
+
 
 def read_manifest() -> tuple:
     """Return (manifest_dict, errors)."""
@@ -57,6 +105,7 @@ def read_manifest() -> tuple:
                       f"{ADDON.name!r} (addon code looks it up by this name)")
     if not re.fullmatch(r"\d+\.\d+\.\d+", str(manifest.get("version", ""))):
         errors.append("manifest version must look like '1.0.0'")
+    errors.extend(validate_manifest_rules(manifest))
     return manifest, errors
 
 

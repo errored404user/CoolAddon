@@ -60,7 +60,7 @@ class TestInstallPackage(unittest.TestCase):
                                     for n in names), names[:5])
 
     def test_server_refuses_occupied_port(self):
-        from extension import server as ext_server
+        from dashboard import server as ext_server
         sock = socket.socket()
         sock.bind(("127.0.0.1", 0))
         sock.listen(1)

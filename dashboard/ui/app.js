@@ -1,4 +1,4 @@
-/* Blender AI Extension dashboard — vanilla JS, polling, no dependencies. */
+/* Blender AI Dashboard — vanilla JS, polling, no dependencies. */
 "use strict";
 
 const $ = (id) => document.getElementById(id);
@@ -51,7 +51,7 @@ async function refreshStatus() {
          " — open Blender → AI Agent → Start Server.");
   } catch (e) {
     $("dot").className = "dot red";
-    $("connMsg").textContent = "Extension server error: " + e.message;
+    $("connMsg").textContent = "Dashboard server error: " + e.message;
   }
 }
 

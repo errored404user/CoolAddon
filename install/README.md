@@ -41,6 +41,7 @@ the addon itself requires **no pip packages**.
 | Red error on enable | Environment-specific conflict | Window → *Toggle System Console*, copy the traceback (see §8) |
 | Old version stuck / "already installed" | Stale copy in Blender's folders | Remove it in Preferences, **restart Blender**, install the new ZIP |
 | "Legacy add-on" warning (4.2+) | You used the legacy ZIP | Harmless — but prefer the non-legacy `dist` file |
+| *"Cannot load extension… Filenames starting with \_ are reserved"* | You opened the file in **Chrome/Edge** (`chrome://extensions`) — this project has **no** browser extension | Don't load anything into Chrome. Blender part → install the `dist/` ZIP **in Blender** (§1/§2); web UI → **run** `python dashboard/server.py`, then open the printed URL in any browser |
 
 **Manual install (bypasses the installer entirely):**
 - 4.2+: unzip `BlenderAIConnection-1.0.0.zip` so that
@@ -95,22 +96,24 @@ note panel keys are stored in the `.blend` file). Then: AI Agent tab →
 AI PROVIDER → **LLM provider** → START AGENT. Terminal alternative:
 `python agent_runner/llm.py run --provider deepseek --task "…"`.
 
-## 7) Extension dashboard (recommended UI for Blender + providers)
+## 7) Dashboard (recommended UI for Blender + providers)
 
-Easiest: double-click **`Start-Extension.bat`** (Windows) or run
-`./start-extension.sh` (macOS/Linux) — a browser tab opens automatically.
+Not a browser extension and not installed into Blender — a local web app you **run**:
+
+Easiest: double-click **`Start-Dashboard.bat`** (Windows) or run
+`./start-dashboard.sh` (macOS/Linux) — a browser tab opens automatically.
 
 Manual equivalent:
 
 ```bash
-python extension/server.py [--port 8899] [--open]
+python dashboard/server.py [--port 8899] [--open]
 # open http://localhost:8899
 ```
 
 Needs the Blender bridge running (§1/§2). Pick engine **Built-in** (free, offline)
 or **LLM provider** (key via field or env var, §6), choose a mode, type a task,
 press **START AGENT**. If the port is taken you'll get a clear message —
-retry with `--port 8900`. Settings live in `extension/config/extension.json`.
+retry with `--port 8900`. Settings live in `dashboard/config/extension.json`.
 
 ## 8) Verify the install
 

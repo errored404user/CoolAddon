@@ -1,5 +1,6 @@
 @echo off
-REM Double-click launcher (Windows) for the Blender AI Extension dashboard.
+REM Double-click launcher (Windows) for the Blender AI Dashboard.
+REM This runs a local web app - it is NOT a browser extension.
 cd /d %~dp0
 where python >nul 2>nul
 if %errorlevel% neq 0 (
@@ -8,5 +9,5 @@ if %errorlevel% neq 0 (
   pause
   exit /b 1
 )
-python extension\server.py --open %*
+python dashboard\server.py --open %*
 if %errorlevel% neq 0 pause

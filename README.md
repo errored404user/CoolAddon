@@ -23,6 +23,10 @@ bridge that external AIs can also drive via **MCP**.
   Animation, Environment, Procedural, Lighting, Cutscene, Director, Optimization, Debug.
 - **Built-in agent**: type a task, press **START AGENT** — non-blocking execution with
   progress, history, logs and one-click examples. No external AI or setup required.
+- **Real AI models built in**: OpenAI, DeepSeek, Gemini, Kimi, Claude or any
+  OpenAI-compatible endpoint can drive Blender through API keys (panel + CLI).
+- **Dashboard**: local web control center wiring Blender + providers together —
+  connection status, provider picker, modes, tools, START AGENT, live feed, jobs.
 - **MCP bridge**: control Blender from Claude Desktop or any MCP client
   (`tools/list` + `tools/call`), with a dependency-free fallback backend.
 - **Agent CLI**: drive Blender from a terminal (`plan`, `run`, `tool`, `ping`).
@@ -100,6 +104,21 @@ Notes: API usage is billed by each provider. Keys in the panel are saved into
 `.blend` files — prefer env vars. Microsoft Copilot (copilot.ai) has **no
 public API**, so it can't be added as a provider.
 
+### E. Dashboard (connects Blender + providers in one UI — run it, don't install it)
+
+```bash
+python dashboard/server.py
+# open http://localhost:8899
+```
+
+The dashboard is the bridge between Blender and every AI provider: live
+connection status, engine switch (built-in planner ⇄ LLM provider with
+model/key/endpoint), all 12 modes, searchable tool browser with one-click
+runs, plan preview (works even with Blender offline), START AGENT with a
+streaming execution feed, results, past jobs, and a copy-paste MCP config
+for Claude Desktop / Cursor. API keys stay in server memory only.
+It is NOT a browser extension — never load it in `chrome://extensions`.
+
 ## The panel
 
 | Section | What it does |
@@ -136,7 +155,7 @@ blender_ai_connection/          # Blender addon (zip this to install)
   utils/blender_utils.py        # safe bpy wrappers
 mcp_server/                     # stdio MCP server → TCP bridge (SDK + minimal backends)
 agent_runner/cli.py             # terminal client (plan/run/tool/ping/tools/modes)
-extension/                      # web control center: dashboard + job server
+dashboard/                      # local web control center (RUN it, don't install it)
   server.py  ui/  config/       # stdlib HTTP, vanilla JS, settings
 skills/                         # 8 agent playbooks (modeling…director) for LLMs
 config/config.json              # defaults: endpoint, limits, log level, permissions
@@ -183,7 +202,7 @@ whole pipeline). Every mode ships an LLM `system_prompt` in `system.modes`.
 
 `config/config.json` holds defaults; Blender-side overrides live in
 Preferences → *Blender AI Connection* (host/port, log level, max steps/retries,
-step timeout, auto-start, denied-tools list). Denied tools return `TOOL_DENIED`
+step timeout, auto-start, denied-tools list). Choose the LLM provider, model, key and endpoint per run in the panel or terminal flags. Denied tools return `TOOL_DENIED`
 instead of running.
 
 ## For developers
@@ -228,3 +247,8 @@ python -m unittest discover -s tests -v
 
 These are E02architected extension points (new tools/modes drop in cleanly) — see
 `skills/` + the developer guide above.
+
+## License
+
+GNU General Public License v3.0 or later (GPL-3.0-or-later) — see [LICENSE](LICENSE).
+GPL is required for add-ons listed on the Blender Extensions Platform.

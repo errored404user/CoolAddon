@@ -1,8 +1,13 @@
-# Blender AI Extension — Control Center
+# Blender AI Dashboard — Control Center
 
-A local web dashboard that connects **Blender** and **AI providers** in one place.
-This is the `extension/` component of the project architecture: the
-`blender_ai_connection/` addon runs *inside* Blender, while this extension runs
+> **What this is NOT:** not a browser extension (never load it in
+> `chrome://extensions` — Chrome will reject it), and not a Blender add-on.
+> It is a **local web app**: you *run* it with Python, then use it from any
+> browser. The Blender add-on itself is `blender_ai_connection/`
+> (installable ZIPs in `dist/`).
+
+A local web dashboard that connects **Blender** and **AI providers** in one place:
+the `blender_ai_connection/` addon runs *inside* Blender, while this dashboard runs
 *next to* it (browser UI + job server).
 
 Stdlib-only Python + vanilla JS — no installs, no build step, works offline
@@ -11,9 +16,11 @@ Stdlib-only Python + vanilla JS — no installs, no build step, works offline
 ## Run it
 
 ```bash
-python extension/server.py [--port 8899] [--blender-port 9876]
+python dashboard/server.py [--port 8899] [--blender-port 9876] [--open]
 # open http://localhost:8899
 ```
+
+Or double-click `Start-Dashboard.bat` (Windows) / `start-dashboard.sh` (macOS, Linux).
 
 1. In Blender: AI Agent tab → **Start Server** (the bridge).
 2. Here: CONNECTION turns green. Pick engine (**Built-in planner** = free,
@@ -39,5 +46,5 @@ python extension/server.py [--port 8899] [--blender-port 9876]
   over the bridge with the same auto-recovery as the in-Blender agent.
 - The LLM engine runs the shared `llm.agent_loop` against the bridge — identical
   behavior to `agent_runner/llm.py`, with live browser progress.
-- `extension/config/extension.json` holds server/blender/default settings.
+- `dashboard/config/extension.json` holds server/blender/default settings.
   Keys are never written anywhere — use env vars or paste per session.

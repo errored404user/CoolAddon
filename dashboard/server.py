@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Blender AI Extension — web control center connecting Blender + AI providers.
+"""Blender AI Dashboard — web control center connecting Blender + AI providers.
+
+NOTE: this is NOT a browser extension and NOT a Blender add-on. It is a local
+web app: run it with Python, then open the printed URL in any browser.
 
 One local dashboard (stdlib only, no installs) that:
   - connects to the Blender bridge (connection status, tools, modes),
@@ -8,7 +11,7 @@ One local dashboard (stdlib only, no installs) that:
   - streams execution progress, results and logs (START AGENT for the browser).
 
 Run:
-    python extension/server.py [--port 8899] [--blender-port 9876]
+    python dashboard/server.py [--port 8899] [--blender-port 9876]
 Then open http://localhost:8899
 """
 
@@ -49,7 +52,7 @@ MAX_BODY = 10 * 1024 * 1024
 
 
 def _log(message: str) -> None:
-    print(f"[extension] {message}", file=sys.stderr, flush=True)
+    print(f"[dashboard] {message}", file=sys.stderr, flush=True)
 
 
 # ---------------------------------------------------------------------------
@@ -399,7 +402,7 @@ def run_llm_job(store: JobStore, settings: Dict[str, Any],
 # ---------------------------------------------------------------------------
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "BlenderAIExtension/1.0"
+    server_version = "BlenderAIDashboard/1.0"
     settings: Dict[str, Any] = {}
     store: JobStore = None  # type: ignore
 
@@ -655,7 +658,7 @@ def create_server(host: str = "127.0.0.1", port: int = 0,
 
 
 def main(argv=None) -> int:
-    parser = argparse.ArgumentParser(description="Blender AI Extension dashboard")
+    parser = argparse.ArgumentParser(description="Blender AI Dashboard")
     parser.add_argument("--host", default=None)
     parser.add_argument("--port", type=int, default=None)
     parser.add_argument("--blender-host", default=None)
@@ -684,7 +687,7 @@ def main(argv=None) -> int:
     server.daemon_threads = True
     url_host = "localhost" if host == "0.0.0.0" else host
     url = f"http://{url_host}:{port}"
-    print(f"Blender AI Extension: {url}")
+    print(f"Blender AI Dashboard: {url}")
     print(f"Blender bridge target: {settings['blender']['host']}:{settings['blender']['port']}")
     if args.open:
         try:
