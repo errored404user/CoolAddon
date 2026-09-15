@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "blender": {
+      "command": "python",
+      "args": [
+        "/ABS/PATH/CoolAddon/mcp_server/server.py",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "9876"
+      ],
+      "description": "Replace /ABS/PATH with your checkout path, then restart Claude Desktop. In Blender: AI Agent tab -> Start Server."
+    }
+  }
+}

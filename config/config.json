@@ -1,0 +1,36 @@
+{
+  "mcp": {
+    "host": "127.0.0.1",
+    "port": 9876,
+    "heartbeat_interval": 30,
+    "connect_timeout": 5,
+    "comment": "Blender addon runs a TCP bridge on host:port. The MCP server connects to it."
+  },
+  "agent": {
+    "default_mode": "SMART",
+    "max_steps": 60,
+    "max_retries": 1,
+    "step_timeout": 120
+  },
+  "logging": {
+    "level": "INFO"
+  },
+  "ui": {
+    "log_history_limit": 300,
+    "op_history_limit": 100
+  },
+  "tools": {
+    "allow_all": true,
+    "denied": []
+  },
+  "providers": {
+    "active": "openai",
+    "custom_base_url": "",
+    "custom_model": "",
+    "comment": "API keys are NEVER stored here. Use the Blender panel Key field or env vars: OPENAI_API_KEY, DEEPSEEK_API_KEY, GEMINI_API_KEY, MOONSHOT_API_KEY, ANTHROPIC_API_KEY, BLENDER_AI_API_KEY."
+  },
+  "timeouts": {
+    "tool_default": 60,
+    "agent_total": 1800
+  }
+}

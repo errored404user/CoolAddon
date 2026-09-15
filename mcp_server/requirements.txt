@@ -1,0 +1,4 @@
+# MCP server dependencies.
+# The server ALSO runs without these (minimal JSON-RPC fallback),
+# but the official SDK is recommended for full MCP compatibility.
+mcp>=1.0.0
